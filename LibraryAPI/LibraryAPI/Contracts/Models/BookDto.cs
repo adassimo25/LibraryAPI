@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Contracts.Models
 {
-    public class Book
+    public class BookDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public Author Author { get; set; }
+        public AuthorDto Author { get; set; }
     }
 }

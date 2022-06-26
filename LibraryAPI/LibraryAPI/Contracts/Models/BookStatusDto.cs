@@ -1,9 +1,9 @@
-﻿using LibraryAPI.Enums;
+﻿using LibraryAPI.Domain.StatusHistories;
 using System;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Contracts.Models
 {
-    public class BookStatus
+    public class BookStatusDto
     {
         public Guid Id { get; set; }
         public Guid BookId { get; set; }

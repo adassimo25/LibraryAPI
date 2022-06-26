@@ -1,9 +1,10 @@
-﻿using LibraryAPI.Enums;
+﻿using LibraryAPI.Domain.Books;
+using LibraryAPI.Domain.StatusHistories;
 using System;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Contracts.Models
 {
-    public class BookDetails
+    public class BookDetailsDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -11,7 +12,7 @@ namespace LibraryAPI.Models
         public DateTime PublicationDate { get; set; }
         public BookGenres Genre { get; set; }
         public Statuses CurrentStatus { get; set; }
-        public Author Author { get; set; }
+        public AuthorDto Author { get; set; }
 
         /// <summary>
         /// Should be true if Language is equal to "Polski" or "polski", otherwise false

@@ -1,7 +1,7 @@
-﻿using LibraryAPI.Enums;
+﻿using LibraryAPI.Domain.Books;
 using System;
 
-namespace LibraryAPI.Models
+namespace LibraryAPI.Contracts.Models
 {
     public class InsertBookDto
     {

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using LibraryAPI.Contracts.Models;
+using LibraryAPI.Domain.StatusHistories;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LibraryAPI.Enums;
-using LibraryAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers
 {
@@ -18,7 +18,7 @@ namespace LibraryAPI.Controllers
         /// <param name="limit">Number of books on each page</param>
         /// <returns>List of Books sorted by book title</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Book>> GetBooks(int page = 0, int limit = 10)
+        public ActionResult<IEnumerable<BookDto>> GetBooks(int page = 0, int limit = 10)
         {
             return Ok();
         }
@@ -29,7 +29,7 @@ namespace LibraryAPI.Controllers
         /// <param name="bookId">Book Id</param>
         /// <returns>Details of a book</returns>
         [HttpGet("details/{bookId}")]
-        public ActionResult<BookDetails> GetBookDetails([FromRoute] Guid bookId)
+        public ActionResult<BookDetailsDto> GetBookDetails([FromRoute] Guid bookId)
         {
             return Ok();
         }
@@ -40,7 +40,7 @@ namespace LibraryAPI.Controllers
         /// <param name="bookId">Book Id</param>
         /// <returns>List of BookStatuses</returns>
         [HttpGet("statuses/{bookId}")]
-        public ActionResult<IEnumerable<BookStatus>> GetBookStatuses([FromRoute] Guid bookId)
+        public ActionResult<IEnumerable<BookStatusDto>> GetBookStatuses([FromRoute] Guid bookId)
         {
             return Ok();
         }
