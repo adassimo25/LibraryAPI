@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LibraryAPI.Contracts.Models
+namespace LibraryAPI.Contracts.Dtos
 {
     public class AuthorDto
     {

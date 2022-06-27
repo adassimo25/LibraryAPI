@@ -1,5 +1,7 @@
+using LibraryAPI.CQRS;
 using LibraryAPI.DataAccess;
 using LibraryAPI.DataAccess.Repositories;
+using LibraryAPI.Services;
 using LibraryAPI.StartupTasks.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +29,13 @@ namespace LibraryAPI
             services.AddDbContext<LibraryDbContext>(options =>
                 options.UseSqlServer(Config.Services.Database.ConnectionString(Configuration)));
 
-            services.RegisterGenericTypes(typeof(IRepository<,>));
+            services.RegisterGenericTypes(
+                typeof(IRepository<,>),
+                typeof(ICQValidator<>),
+                typeof(ICommandHandler<>),
+                typeof(IQueryHandler<,>));
+
+            services.AddSingleton(AutoMapperService.Initialize());
 
             services.AddStartupTask<AddMigrationsStartupTask>();
 

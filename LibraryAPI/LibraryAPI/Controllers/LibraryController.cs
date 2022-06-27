@@ -1,4 +1,6 @@
-﻿using LibraryAPI.Contracts.Models;
+﻿using LibraryAPI.Contracts.CQRS.Commands;
+using LibraryAPI.Contracts.CQRS.Queries;
+using LibraryAPI.Contracts.Dtos;
 using LibraryAPI.Domain.StatusHistories;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,8 +11,12 @@ namespace LibraryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LibraryController : ControllerBase
+    public class LibraryController : BaseLibraryAPIController
     {
+        public LibraryController(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
         /// <summary>
         /// Get list of books (Id and Title)
         /// </summary>
@@ -18,9 +24,10 @@ namespace LibraryAPI.Controllers
         /// <param name="limit">Number of books on each page</param>
         /// <returns>List of Books sorted by book title</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<BookDto>> GetBooks(int page = 0, int limit = 10)
+        public Task<IActionResult> GetBooks(int page = 0, int limit = 10)
         {
-            return Ok();
+            var query = new GetBooks { PageNumber = page, PageSize = limit };
+            return HandleQueryAsync<GetBooks, IEnumerable<BookDto>>(query);
         }
 
         /// <summary>
@@ -29,9 +36,10 @@ namespace LibraryAPI.Controllers
         /// <param name="bookId">Book Id</param>
         /// <returns>Details of a book</returns>
         [HttpGet("details/{bookId}")]
-        public ActionResult<BookDetailsDto> GetBookDetails([FromRoute] Guid bookId)
+        public Task<IActionResult> GetBookDetails([FromRoute] Guid bookId)
         {
-            return Ok();
+            var query = new GetBookDetails { BookId = bookId };
+            return HandleQueryAsync<GetBookDetails, BookDetailsDto>(query);
         }
 
         /// <summary>
@@ -40,9 +48,10 @@ namespace LibraryAPI.Controllers
         /// <param name="bookId">Book Id</param>
         /// <returns>List of BookStatuses</returns>
         [HttpGet("statuses/{bookId}")]
-        public ActionResult<IEnumerable<BookStatusDto>> GetBookStatuses([FromRoute] Guid bookId)
+        public Task<IActionResult> GetBookStatuses([FromRoute] Guid bookId)
         {
-            return Ok();
+            var query = new GetBookStatuses { BookId = bookId };
+            return HandleQueryAsync<GetBookStatuses, IEnumerable<BookStatusDto>>(query);
         }
 
         /// <summary>
@@ -51,9 +60,9 @@ namespace LibraryAPI.Controllers
         /// <param name="insertBookDto">Book to create details</param>
         /// <returns>Id of new book</returns>
         [HttpPost]
-        public async Task<ActionResult<Guid>> InsertBook([FromBody] InsertBookDto insertBookDto)
+        public Task<IActionResult> InsertBook([FromBody] InsertBook insertBook)
         {
-            return Ok();
+            return HandleQueryAsync<InsertBook, Guid>(insertBook);
         }
 
         /// <summary>
@@ -62,9 +71,10 @@ namespace LibraryAPI.Controllers
         /// <param name="bookId">Bookd Id</param>
         /// <param name="status">New book status</param>
         [HttpPost("status/{bookId}")]
-        public ActionResult ChangeBookStatus([FromRoute] Guid bookId, [FromBody] Statuses status)
+        public Task<IActionResult> ChangeBookStatus([FromRoute] Guid bookId, [FromBody] Statuses status)
         {
-            return Ok();
+            var command = new ChangeBookStatus { BookId = bookId, Status = status };
+            return HandleCommandAsync<ChangeBookStatus>(command);
         }
     }
 }

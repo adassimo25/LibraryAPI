@@ -50,7 +50,7 @@ namespace LibraryAPI.DataAccess
                 // After seeding data
                 cfg.HasOne(e => e.CurrentStatus);
 
-                cfg.HasMany(e => e.StatusHistory)
+                cfg.HasMany(e => e.StatusHistories)
                     .WithOne(e => e.Book);
 
                 cfg.HasMany(e => e.Authors)

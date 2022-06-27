@@ -23,10 +23,10 @@ namespace LibraryAPI.Domain.Books
         public BookGenres? Genre { get; private init; } = null;
         public int? PageNumber { get; private init; } = null;
         public IReadOnlyList<Author> Authors => authors;
-        public IReadOnlyList<StatusHistory> StatusHistory => statusHistories;
+        public IReadOnlyList<StatusHistory> StatusHistories => statusHistories;
 
         public static Book Create(Guid id, StatusHistory currentStatus, string title, string language,
-            DateTime publicationDate, BookGenres genre, int pageNumber)
+            DateTime? publicationDate, BookGenres? genre, int? pageNumber = null)
         {
             return new()
             {
@@ -38,6 +38,21 @@ namespace LibraryAPI.Domain.Books
                 Genre = genre,
                 PageNumber = pageNumber
             };
+        }
+
+        public void AddAuthor(Author author)
+        {
+            authors.Add(author);
+        }
+
+        public void AddStatus(StatusHistory status)
+        {
+            statusHistories.Add(status);
+        }
+
+        public void ChangeStatus(StatusHistory status)
+        {
+            CurrentStatus = status;
         }
     }
 

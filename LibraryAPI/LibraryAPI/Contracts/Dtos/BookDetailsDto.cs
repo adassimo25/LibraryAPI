@@ -2,7 +2,7 @@
 using LibraryAPI.Domain.StatusHistories;
 using System;
 
-namespace LibraryAPI.Contracts.Models
+namespace LibraryAPI.Contracts.Dtos
 {
     public class BookDetailsDto
     {
