@@ -36,15 +36,13 @@ namespace LibraryAPI.CQRS.Commands
         private readonly IRepository<Book, Guid> books;
         private readonly IRepository<Author, Guid> authors;
         private readonly ILogger<InsertBookQH> logger;
-        private readonly LibraryDbContext dbContext;
 
         public InsertBookQH(IRepository<Book, Guid> books, IRepository<Author, Guid> authors,
-            ILogger<InsertBookQH> logger, LibraryDbContext dbContext)
+            ILogger<InsertBookQH> logger)
         {
             this.books = books;
             this.authors = authors;
             this.logger = logger;
-            this.dbContext = dbContext;
         }
 
         public async Task<Guid> ExecuteAsync(InsertBook command, LibraryContext context)

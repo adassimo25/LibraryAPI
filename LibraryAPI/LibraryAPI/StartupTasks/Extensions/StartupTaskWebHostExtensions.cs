@@ -29,7 +29,7 @@ namespace LibraryAPI.StartupTasks.Extensions
             catch (Exception e)
             {
                 var message = $"{e.Message} Stack trace: {e.StackTrace}";
-                throw;
+                throw new Exception(message);
             }
         }
     }

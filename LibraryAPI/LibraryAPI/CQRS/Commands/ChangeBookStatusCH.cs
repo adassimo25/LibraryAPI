@@ -30,15 +30,13 @@ namespace LibraryAPI.CQRS.Commands
         private readonly IRepository<Book, Guid> books;
         private readonly IRepository<StatusHistory, Guid> statusHistories;
         private readonly ILogger<ChangeBookStatusCH> logger;
-        private readonly LibraryDbContext dbContext;
 
         public ChangeBookStatusCH(IRepository<Book, Guid> books, IRepository<StatusHistory, Guid> statusHistories,
-            ILogger<ChangeBookStatusCH> logger, LibraryDbContext dbContext)
+            ILogger<ChangeBookStatusCH> logger)
         {
             this.books = books;
             this.statusHistories = statusHistories;
             this.logger = logger;
-            this.dbContext = dbContext;
         }
 
         public async Task ExecuteAsync(ChangeBookStatus command, LibraryContext context)

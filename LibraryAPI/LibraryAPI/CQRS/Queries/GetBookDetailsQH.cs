@@ -3,6 +3,7 @@ using FluentValidation;
 using LibraryAPI.Contracts.CQRS.Queries;
 using LibraryAPI.Contracts.Dtos;
 using LibraryAPI.DataAccess;
+using LibraryAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,11 +28,13 @@ namespace LibraryAPI.CQRS.Queries
     {
         private readonly LibraryDbContext dbContext;
         private readonly IMapper mapper;
+        private readonly IExternalAPIService<BookPrice> externalAPIService;
 
-        public GetBookDetailsQH(LibraryDbContext dbContext, IMapper mapper)
+        public GetBookDetailsQH(LibraryDbContext dbContext, IMapper mapper, IExternalAPIService<BookPrice> externalAPIService)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            this.externalAPIService = externalAPIService;
         }
 
         public async Task<BookDetailsDto> ExecuteAsync(GetBookDetails query, LibraryContext context)
@@ -45,8 +48,10 @@ namespace LibraryAPI.CQRS.Queries
 
             var bookDetails = mapper.Map<BookDetailsDto>(book);
 
-            bookDetails.Author = mapper.Map<AuthorDto>(book.Authors.FirstOrDefault());
-            bookDetails.CurrentPrice = -1; // TODO
+            bookDetails.Author = mapper.Map<AuthorDto>(source: book.Authors.FirstOrDefault());
+
+            var bookPrice = await externalAPIService.GetResources(Consts.ExternalAPI.BookPrice(query.BookId));
+            bookDetails.CurrentPrice = bookPrice != null ? bookPrice.Price : -1;
 
             return bookDetails;
         }

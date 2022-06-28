@@ -31,6 +31,8 @@ namespace LibraryAPI.CQRS.Queries
         {
             var booksPaginated = await dbContext.Books
                 .AsNoTracking()
+                .OrderBy(b => b.Title)
+                .Paginated(query)
                 .Include(b => b.Authors)
                 .Select(b => new
                 {
@@ -38,10 +40,9 @@ namespace LibraryAPI.CQRS.Queries
                     b.Title,
                     Author = b.Authors.FirstOrDefault()
                 })
-                .OrderBy(b => b.Title)
-                .ToPaginatedResultAsync(query);
+                .ToListAsync();
 
-            return booksPaginated.Elements
+            return booksPaginated
                     .Select(b => new BookDto
                     {
                         Id = b.Id,

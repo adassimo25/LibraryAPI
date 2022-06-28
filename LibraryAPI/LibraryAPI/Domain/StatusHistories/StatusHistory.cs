@@ -10,7 +10,7 @@ namespace LibraryAPI.Domain.StatusHistories
         public DateTime ModifiedDate { get; private init; }
         public Statuses Status { get; private init; }
 
-        internal static StatusHistory Create(Guid id, Book book, DateTime modifiedDate, Statuses status)
+        public static StatusHistory Create(Guid id, Book book, DateTime modifiedDate, Statuses status)
         {
             return new()
             {

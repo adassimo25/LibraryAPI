@@ -18,13 +18,11 @@ namespace LibraryAPI.StartupTasks.Extensions
 
         public async Task ExecuteAsync(CancellationToken cancellationToken = default)
         {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<LibraryDbContext>()
-                    ?? throw new NullReferenceException();
+            using var scope = serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<LibraryDbContext>()
+                ?? throw new NullReferenceException();
 
-                await dbContext.Database.MigrateAsync(cancellationToken: cancellationToken);
-            }
+            await dbContext.Database.MigrateAsync(cancellationToken: cancellationToken);
         }
     }
 }

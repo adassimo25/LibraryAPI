@@ -36,6 +36,7 @@ namespace LibraryAPI
                 typeof(IQueryHandler<,>));
 
             services.AddSingleton(AutoMapperService.Initialize());
+            services.AddScoped(typeof(IExternalAPIService<>), typeof(ExternalAPIService<>));
 
             services.AddStartupTask<AddMigrationsStartupTask>();
 

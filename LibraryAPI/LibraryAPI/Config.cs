@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace LibraryAPI
 {
@@ -17,8 +16,5 @@ namespace LibraryAPI
                 public static string ConnectionString(IConfiguration cfg) => cfg.GetConnectionString("Database");
             }
         }
-
-        public static void Register(IServiceCollection services, IConfiguration cfg)
-        { }
     }
 }
