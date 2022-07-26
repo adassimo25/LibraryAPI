@@ -62,7 +62,7 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public Task<IActionResult> InsertBook([FromBody] InsertBook insertBook)
         {
-            return HandleQueryAsync<InsertBook, Guid>(insertBook);
+            return HandleCommandAsync<InsertBook>(insertBook);
         }
 
         /// <summary>

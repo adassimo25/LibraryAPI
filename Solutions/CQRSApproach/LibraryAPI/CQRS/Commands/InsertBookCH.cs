@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using LibraryAPI.Contracts.CQRS.Queries;
+using LibraryAPI.Contracts.CQRS.Commands;
 using LibraryAPI.DataAccess;
 using LibraryAPI.DataAccess.Repositories;
 using LibraryAPI.Domain.Authors;
@@ -13,9 +13,9 @@ using SL = LibraryAPI.DataAccess.Consts.StringLengths;
 
 namespace LibraryAPI.CQRS.Commands
 {
-    public class InsertBookQV : CQValidator<InsertBook>
+    public class InsertBookCV : CQValidator<InsertBook>
     {
-        public InsertBookQV(LibraryDbContext dbContext)
+        public InsertBookCV(LibraryDbContext dbContext)
         {
             RuleFor(cmd => cmd)
                 .MustAsync(async (cmd, ct) =>
@@ -31,21 +31,21 @@ namespace LibraryAPI.CQRS.Commands
         }
     }
 
-    public class InsertBookQH : IQueryHandler<InsertBook, Guid>
+    public class InsertBookCH : ICommandHandler<InsertBook>
     {
         private readonly IRepository<Book, Guid> books;
         private readonly IRepository<Author, Guid> authors;
-        private readonly ILogger<InsertBookQH> logger;
+        private readonly ILogger<InsertBookCH> logger;
 
-        public InsertBookQH(IRepository<Book, Guid> books, IRepository<Author, Guid> authors,
-            ILogger<InsertBookQH> logger)
+        public InsertBookCH(IRepository<Book, Guid> books, IRepository<Author, Guid> authors,
+            ILogger<InsertBookCH> logger)
         {
             this.books = books;
             this.authors = authors;
             this.logger = logger;
         }
 
-        public async Task<Guid> ExecuteAsync(InsertBook command, LibraryContext context)
+        public async Task ExecuteAsync(InsertBook command, LibraryContext context)
         {
             var newBook = Book.Create(Guid.NewGuid(), null, command.Title, command.Language,
                                 command.PublicationDate, command.Genre);
@@ -65,8 +65,6 @@ namespace LibraryAPI.CQRS.Commands
             books.Update(newBook);
 
             logger.LogInformation($"Book {newBook.Id} created with status {newStatus.Id}.");
-
-            return newBook.Id;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using LibraryAPI.Domain.Books;
 using System;
 
-namespace LibraryAPI.Contracts.CQRS.Queries
+namespace LibraryAPI.Contracts.CQRS.Commands
 {
     public class InsertBook
     {

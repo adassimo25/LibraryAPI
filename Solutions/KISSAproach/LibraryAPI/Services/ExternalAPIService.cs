@@ -1,5 +1,7 @@
 ﻿using LibraryAPI.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -9,17 +11,33 @@ namespace LibraryAPI.Services
         where TResult : class
     {
         private readonly HttpClient client = new();
+        private readonly ILogger<ExternalAPIService<TResult>> logger;
+
+        public ExternalAPIService(ILogger<ExternalAPIService<TResult>> logger)
+        {
+            this.logger = logger;
+        }
 
         public async Task<TResult> GetResources(string url)
         {
+            HttpResponseMessage response = new();
+            string responseContent = new("<no-content>");
+
             try
             {
-                var response = await client.GetAsync(url);
-                var result = JsonConvert.DeserializeObject<TResult>(await response.Content.ReadAsStringAsync());
+                response = await client.GetAsync(url);
+                responseContent = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<TResult>(responseContent);
 
                 return result;
             }
-            catch { }
+            catch (Exception e)
+            {
+                logger.LogError($"ExternalAPI response status: {response.StatusCode}");
+                logger.LogError($"ExternalAPI response content: {responseContent}");
+                logger.LogError(e.Message);
+            }
 
             return default;
         }
