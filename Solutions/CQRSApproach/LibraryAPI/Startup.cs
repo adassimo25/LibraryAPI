@@ -35,13 +35,12 @@ namespace LibraryAPI
                 typeof(ICQValidator<>),
                 typeof(ICommandHandler<>),
                 typeof(IQueryHandler<,>));
-
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddConsole();
-            });
             
-            services.AddSingleton(AutoMapperService.Initialize(loggerFactory));
+            services.AddSingleton(sp =>
+            {
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+                return AutoMapperService.Initialize(loggerFactory);
+            });
             services.AddScoped(typeof(IExternalAPIService<>), typeof(ExternalAPIService<>));
 
             services.AddStartupTask<AddMigrationsStartupTask>();

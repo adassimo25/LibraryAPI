@@ -37,12 +37,11 @@ namespace LibraryAPI
 
             services.RegisterMarkerTypes(typeof(IService));
 
-            var loggerFactory = LoggerFactory.Create(builder =>
+            services.AddSingleton(sp =>
             {
-                builder.AddConsole();
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+                return AutoMapperService.Initialize(loggerFactory);
             });
-
-            services.AddSingleton(AutoMapperService.Initialize(loggerFactory));
             services.AddScoped(typeof(IExternalAPIService<>), typeof(ExternalAPIService<>));
 
             services.AddStartupTask<AddMigrationsStartupTask>();
